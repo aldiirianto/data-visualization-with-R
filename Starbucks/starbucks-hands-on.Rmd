@@ -1,0 +1,316 @@
+---
+title: "What Do You Know About Starbucks Coffee Company?"
+author: "by Aldi Irianto"
+date: "08 October 2022"
+output: 
+  html_document:
+    theme: united
+    highlight: tango
+          
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Brief History of Starbucks
+
+'Behind every cup of coffee is a story'. The story of Starbucks begins in 1971 along opened its first store of Seattle's historic Pike Place Market. This first store where Starbucks offering fresh-roasted coffee beans, tea, and spices from around the world for their customers. 
+
+Howard Schultz, a young New Yorker joining the company in 1982. Howard have another experienced at Italy's coffehouses, and he planed to bring the warmth and artistry of its coffee culture to Starbucks in Seattle. 
+
+By 1987, Starbucks officially used green aprons and embarked next chapter as a coffehouse.
+
+### Starbucks Around The World
+
+Initially, Starbucks were gaining popularity around the world.
+
+```{r}
+#Data Input and Checking the Data
+starbucks = read.csv(file = "Hands-On/Starbucks/starbucks-location.csv")
+```
+
+```{r}
+head(starbucks)
+```
+
+```{r}
+#Checking columns name
+names(starbucks)
+```
+
+```{r}
+#Inspecting Data & Data Cleaning, eliminate the unrated data (columns number 5,6,14,15,16,17
+
+starbucks$countryCode = as.factor(starbucks$countryCode)
+starbucks$countrySubdivisionCode = as.factor(starbucks$countrySubdivisionCode)
+starbucks$city = as.factor(starbucks$city)
+
+starbucks <- starbucks[,-c(5,6,14,15,16,17)]
+str(starbucks)
+```
+
+```{r}
+#View null data
+
+colSums(is.na(starbucks))
+```
+As we see above, we have very few missing data. So we can move to next steps.
+
+```{r}
+#Checking variabel CountryCode
+levels(starbucks$countryCode)
+```
+
+```{r}
+#install library countrycode
+library(countrycode)
+```
+
+```{r}
+#Checking Country Name by its ISO-II 
+country_name = countrycode(c("AE", "AR", "AT", "AW", "BE", "BG", "BH", "BN", "BS", "CA", "CL", "CN", "CZ", "DE", "ES", "FR", "GB", "GR", "GT", "HK", "HU", "ID", "IE", "JO", "JP", "KR", "KW", "LB", "MO", "MX", "MY", "NL", "NZ", "OM", "PE", "PH", "PL", "PT", "QA", "RO", "RU", "SA", "SG", "SK", "SV", "TH", "TR", "TW", "US"), origin = 'iso2c', destination = 'country.name')
+
+country_name
+```
+```{r}
+#Creating new variable Country Name
+starbucks$countryName[starbucks$countryCode=='AE'] <- "United Arab Emirates"
+starbucks$countryName[starbucks$countryCode=='AR'] <- "Argentina"
+starbucks$countryName[starbucks$countryCode=='AT'] <- "Austria"
+starbucks$countryName[starbucks$countryCode=='AW'] <- "Aruba"
+starbucks$countryName[starbucks$countryCode=='BE'] <- "Belgium"
+starbucks$countryName[starbucks$countryCode=='BG'] <- "Bulgaria"
+starbucks$countryName[starbucks$countryCode=='BH'] <- "Bahrain"
+starbucks$countryName[starbucks$countryCode=='BN'] <- "Brunei"
+starbucks$countryName[starbucks$countryCode=='BS'] <- "Bahamas"
+starbucks$countryName[starbucks$countryCode=='CA'] <- "Canada"
+starbucks$countryName[starbucks$countryCode=='CL'] <- "Chile"
+starbucks$countryName[starbucks$countryCode=='CN'] <- "China"
+starbucks$countryName[starbucks$countryCode=='CZ'] <- "Czechia"
+starbucks$countryName[starbucks$countryCode=='DE'] <- "Germany"
+starbucks$countryName[starbucks$countryCode=='ES'] <- "Spain"
+starbucks$countryName[starbucks$countryCode=='FR'] <- "France"
+starbucks$countryName[starbucks$countryCode=='GB'] <- "United Kingdom"
+starbucks$countryName[starbucks$countryCode=='GR'] <- "Greece"
+starbucks$countryName[starbucks$countryCode=='GT'] <- "Guatemala"
+starbucks$countryName[starbucks$countryCode=='HK'] <- "Hong Kong SAR China"
+starbucks$countryName[starbucks$countryCode=='HU'] <- "Hungary"
+starbucks$countryName[starbucks$countryCode=='ID'] <- "Indonesia"
+starbucks$countryName[starbucks$countryCode=='IE'] <- "Ireland"
+starbucks$countryName[starbucks$countryCode=='JO'] <- "Jordan"
+starbucks$countryName[starbucks$countryCode=='JP'] <- "Japan"
+starbucks$countryName[starbucks$countryCode=='KR'] <- "South Korea"
+starbucks$countryName[starbucks$countryCode=='KW'] <- "Kuwait"
+starbucks$countryName[starbucks$countryCode=='LB'] <- "Lebanon"
+starbucks$countryName[starbucks$countryCode=='MO'] <- "Macao SAR China"
+starbucks$countryName[starbucks$countryCode=='MX'] <- "Mexico"
+starbucks$countryName[starbucks$countryCode=='MY'] <- "Malaysia"
+starbucks$countryName[starbucks$countryCode=='NL'] <- "Netherlands"
+starbucks$countryName[starbucks$countryCode=='NZ'] <- "New Zealand"
+starbucks$countryName[starbucks$countryCode=='OM'] <- "Oman"
+starbucks$countryName[starbucks$countryCode=='PE'] <- "Peru"
+starbucks$countryName[starbucks$countryCode=='PH'] <- "Philippines"
+starbucks$countryName[starbucks$countryCode=='PL'] <- "Poland"
+starbucks$countryName[starbucks$countryCode=='PT'] <- "Portugal"
+starbucks$countryName[starbucks$countryCode=='QA'] <- "Qatar"
+starbucks$countryName[starbucks$countryCode=='RO'] <- "Romania"
+starbucks$countryName[starbucks$countryCode=='RU'] <- "Russia"
+starbucks$countryName[starbucks$countryCode=='SA'] <- "Saudi Arabia"
+starbucks$countryName[starbucks$countryCode=='SG'] <- "Singapore"
+starbucks$countryName[starbucks$countryCode=='SK'] <- "Slovakia"
+starbucks$countryName[starbucks$countryCode=='SV'] <- "El Salvador"
+starbucks$countryName[starbucks$countryCode=='TH'] <- "Thailand"
+starbucks$countryName[starbucks$countryCode=='TR'] <- "Turkey"
+starbucks$countryName[starbucks$countryCode=='TW'] <- "Taiwan"
+starbucks$countryName[starbucks$countryCode=='US'] <- "United States"
+```
+
+```{r}
+starbucks$countryName <- as.factor(starbucks$countryName)
+levels(starbucks$countryName)
+```
+```{r}
+#Creating new variable sub-continent
+starbucks$sub_continent[starbucks$countryName == "United Arab Emirates"] <- "Middle East"
+starbucks$sub_continent[starbucks$countryName == "Argentina"]<-"South America"
+starbucks$sub_continent[starbucks$countryName=="Austria"]<-"Central Europe"
+starbucks$sub_continent[starbucks$countryName=="Aruba"]<-"South America"
+starbucks$sub_continent[starbucks$countryName=="Bahrain"]<-"Middle East"
+starbucks$sub_continent[starbucks$countryName=="Brunei"]<-"Southeast Asia"
+starbucks$sub_continent[starbucks$countryName=="Bahamas"]<-"North America"
+starbucks$sub_continent[starbucks$countryName=="Canada"]<-"North America"
+starbucks$sub_continent[starbucks$countryName=="Chile"]<-"South America"
+starbucks$sub_continent[starbucks$countryName=="China"]<-"East Asia"
+starbucks$sub_continent[starbucks$countryName=="Czechia"]<-"Central Europe"
+starbucks$sub_continent[starbucks$countryName=="Germany"]<-"Western Europe"
+starbucks$sub_continent[starbucks$countryName=="Spain"]<-"South-western Europe"
+starbucks$sub_continent[starbucks$countryName=="France"]<-"Western Europe"
+starbucks$sub_continent[starbucks$countryName=="United Kingdom"]<-"West Europe"
+starbucks$sub_continent[starbucks$countryName=="Greece"]<-"Southeast Europe"
+starbucks$sub_continent[starbucks$countryName=="Guatemala"]<-"Central America"
+starbucks$sub_continent[starbucks$countryName=="Hong Kong SAR China"]<-"East Asia"
+starbucks$sub_continent[starbucks$countryName=="Hungary"]<-"Central Europe"
+starbucks$sub_continent[starbucks$countryName=="Indonesia"]<-"Southeast Asia"
+starbucks$sub_continent[starbucks$countryName=="Ireland"]<-"North-western Europe"
+starbucks$sub_continent[starbucks$countryName=="Jordan"]<-"Middle East"
+starbucks$sub_continent[starbucks$countryName=="Japan"]<-"East Asia"
+starbucks$sub_continent[starbucks$countryName=="South Korea"]<-"East Asia"
+starbucks$sub_continent[starbucks$countryName=="Kuwait"]<-"Middle East"
+starbucks$sub_continent[starbucks$countryName=="Lebanon"]<-"Middle East"
+starbucks$sub_continent[starbucks$countryName=="Macao SAR China"]<-"East Asia"
+starbucks$sub_continent[starbucks$countryName=="Mexico"]<-"North America"
+starbucks$sub_continent[starbucks$countryName=="Malaysia"]<-"Southeast Asia"
+starbucks$sub_continent[starbucks$countryName=="Netherlands"]<-"West Europe"
+starbucks$sub_continent[starbucks$countryName=="New Zealand"]<-"Oceania"
+starbucks$sub_continent[starbucks$countryName=="Oman"]<-"Middle East"
+starbucks$sub_continent[starbucks$countryName=="Peru"]<-"South America"
+starbucks$sub_continent[starbucks$countryName=="Philippines"]<-"Southeast Asia"
+starbucks$sub_continent[starbucks$countryName=="Poland"]<-"Central Europe"
+starbucks$sub_continent[starbucks$countryName=="Portugal"]<-"South-western Europe"
+starbucks$sub_continent[starbucks$countryName=="Qatar"]<-"Western Asia"
+starbucks$sub_continent[starbucks$countryName=="Romania"]<-"South-eastern Europe"
+starbucks$sub_continent[starbucks$countryName=="Russia"]<-"Eastern Europe & Northern Asia"
+starbucks$sub_continent[starbucks$countryName=="Saudi Arabia"]<-"Middle East"
+starbucks$sub_continent[starbucks$countryName=="Singapore"]<-"Southeast Asia"
+starbucks$sub_continent[starbucks$countryName=="Slovakia"]<-"Central Europe"
+starbucks$sub_continent[starbucks$countryName=="El Salvador"]<-"Central America"
+starbucks$sub_continent[starbucks$countryName=="Thailand"]<-"Southeast Asia"
+starbucks$sub_continent[starbucks$countryName=="Turkey"]<-"Middle East"
+starbucks$sub_continent[starbucks$countryName=="Taiwan"]<-"East Asia"
+starbucks$sub_continent[starbucks$countryName=="United States"]<-"North America"
+```
+
+```{r}
+starbucks$sub_continent <- as.factor(starbucks$sub_continent)
+levels(starbucks$sub_continent)
+```
+```{r}
+#Creating new variable continent
+starbucks$continent[starbucks$sub_continent=="Central America"] <- "America"
+starbucks$continent[starbucks$sub_continent=="Central Europe"] <- "Europe"
+starbucks$continent[starbucks$sub_continent=="East Asia"] <- "Asia"
+starbucks$continent[starbucks$sub_continent=="Eastern Europe & Northern Asia"] <- "Asia"
+starbucks$continent[starbucks$sub_continent=="Middle East"] <- "Asia"
+starbucks$continent[starbucks$sub_continent=="North-western Europe"] <- "Europe"
+starbucks$continent[starbucks$sub_continent=="North America"] <- "America"
+starbucks$continent[starbucks$sub_continent=="Oceania"] <- "Australia/Oceania"
+starbucks$continent[starbucks$sub_continent=="South-eastern Europe"] <- "Europe"
+starbucks$continent[starbucks$sub_continent=="South-western Europe"] <- "Europe"
+starbucks$continent[starbucks$sub_continent=="South America"] <- "America"
+starbucks$continent[starbucks$sub_continent=="Southeast Asia"] <- "Asia"
+starbucks$continent[starbucks$sub_continent=="Southeast Europe"] <- "Europe"
+starbucks$continent[starbucks$sub_continent=="West Europe"] <- "Europe"
+starbucks$continent[starbucks$sub_continent=="Western Asia"] <- "Asia"
+starbucks$continent[starbucks$sub_continent=="Western Europe"] <- "Europe"
+
+```
+
+```{r}
+starbucks$continent <- as.factor(starbucks$continent)
+levels(starbucks$continent)
+```
+
+```{r}
+str(starbucks)
+```
+### A Glimpse About Starbucks Coffee Around The World
+
+```{r}
+nrow(starbucks)
+```
+```{r}
+summary(starbucks)
+```
+For this reports, we’re trying to analyze 28,289 location of Starbucks outlets which distributed in 49 different countries in 4 continents. 
+
+Based on the summary, we can find that United States has the most location of Starbucks Coffee Company in the world and followed by China and Japan. 
+
+```{r}
+graphics::pie(xtabs(~ continent, starbucks))
+```
+
+Based on the pie chart above, we can see clearly that most location of Starbucks outlets can be found in America, with Asia & Europe following behind.
+
+
+### Asia - The Potential Market of Starbucks Coffee
+
+```{r}
+asia <- subset(starbucks, continent == "Asia")
+str(asia)
+```
+```{r}
+summary(asia)
+```
+Asia is the potential market of Starbucks coffee can be said as the heaven of coffees. 
+
+There are at least 9.585 outlets of Starbucks coffee, which more half of those outlets can be found in East Asia. Furthermore, we can also see that Southeast Asia also not fall behind from East Asia. It has at least 1.674 outlets of Starbucks Coffee. For Starbucks coffee's outlets in Asia, in terms of country, you can found most outlets in China, and Japan, South Korea, Taiwan, Turkey, and Indonesia following behind.
+
+```{r}
+starbucks.sub.asia <- as.data.frame(sort(table(droplevels(asia$sub_continent)),decreasing = T))
+names(starbucks.sub.asia)[1]<-paste("sub_continent")
+starbucks.sub.asia
+```
+```{r}
+graphics::barplot(xtabs(Freq ~ sub_continent, starbucks.sub.asia))
+```
+```{r}
+starbucks.asia <- as.data.frame(sort(table(droplevels(asia$countryName)),decreasing = T))
+names(starbucks.asia)[1]<-paste("countryName")
+starbucks.asia
+```
+```{r}
+graphics::barplot(xtabs(Freq ~ countryName, starbucks.asia))
+```
+
+### What About Starbucks Coffee Outlets in Indonesia?
+
+Starbucks Coffee Indonesia firstly opened its store in Plaza Indonesia, 17 May 2002. Nowadays, Starbucks coffee become the top 10 brand in Indonesia, which is significant part of Indonesian people to experience drink premium coffee in a daily life.
+
+```{r}
+ina <- subset(starbucks, countryName == "Indonesia")
+ina <- ina[,-c(5,6,14,15,16,17)]
+names(ina)
+```
+```{r}
+str(ina)
+```
+```{r}
+summary(ina)
+```
+```{r}
+nrow(ina)
+```
+```{r}
+starbucks.ina <- as.data.frame(sort(table(droplevels(ina$city)),decreasing = T))
+names(starbucks.ina)[1]<-paste("city")
+starbucks.ina
+```
+
+
+At least, there are 422 outlets of Starbucks Coffee which you can find in Indonesia, which most of them are availables in Jakarta, and Surabaya, Tangerang, Bandung, Bekasi, Bogor following behind.
+
+
+We can say that Starbucks in Indonesia has spread almost across the province, from East to West of Indonesia.
+
+```{r}
+graphics::barplot(xtabs(Freq ~ city, starbucks.ina))
+```
+
+### Conclusion
+
+Now, what do I know about Starbucks Coffee?
+
+I know that it first store was opened in Seattle's historic Pike Place Market in 1971, and it was growth as the coffeehouse by Howard Schultz's help. 
+
+Asia is the next potential market after its origin place America. East Asia and Southeast Asia are the top 2 of most Starbucks outlets can found in Asia. 
+
+In Indonesia, the first store of Starbucks coffee was opened in Plaza Indonesia, 17 May 2022. There are 422 outlets can found in Indonesia, most of them can found in Jakarta, and Surabaya, Tangerang following behind. Indonesia become one of the Southeast Asia countries which is a potential market for coffee company such as Starbucks Coffee.
+
+### Reference
+
+1. https://www.kaggle.com/datasets/starbucks/store-locations
+2. https://www.kaggle.com/code/juniorbueno/starbucks-maps-location
+3. https://www.starbucks.com/about-us/
+4. https://www.beritasatu.com/archive/74352/starbucks-raih-peringkat-top-10-brand-di-indonesia
+5. https://www.starbucks.co.id/about-us/our-heritage/starbucks-in-indonesia
